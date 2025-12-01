@@ -44,12 +44,13 @@ def get_solution_class(day: int):
     return getattr(module, class_name)
 
 
-def run_day(day: int, part: Optional[int] = None) -> None:
+def run_day(day: int, part: Optional[int] = None, use_sample: bool = False) -> None:
     """Run solution for a specific day.
     
     Args:
         day: Day number (1-25).
         part: Part number (1 or 2), or None to run both.
+        use_sample: Whether to use sample input files instead of puzzle inputs.
     """
     print(f"\n{'='*60}")
     print(f"Day {day}: Running solution(s)")
@@ -57,12 +58,7 @@ def run_day(day: int, part: Optional[int] = None) -> None:
     
     try:
         solution_class = get_solution_class(day)
-        
-        try:
-            input_data = read_input(day, 1)
-        except FileNotFoundError:
-            input_data = read_input(day, 2)
-        
+        input_data = read_input(day, 1, use_sample)
         solution = solution_class(input_data)
         
         if part is None or part == 1:
@@ -71,16 +67,9 @@ def run_day(day: int, part: Optional[int] = None) -> None:
             print(f"   Answer: {answer1}")
         
         if part is None or part == 2:
-            try:
-                input_data_part2 = read_input(day, 2)
-                solution2 = solution_class(input_data_part2)
-                print(f"\nPart 2:")
-                answer2 = solution2.part2()
-                print(f"   Answer: {answer2}")
-            except FileNotFoundError:
-                print(f"\nPart 2:")
-                answer2 = solution.part2()
-                print(f"   Answer: {answer2}")
+            print(f"\nPart 2:")
+            answer2 = solution.part2()
+            print(f"   Answer: {answer2}")
         
     except FileNotFoundError as e:
         print(f"Error: Input file not found for day {day}")
@@ -118,6 +107,7 @@ Examples:
   %(prog)s --day 1            # Run both parts of day 1
   %(prog)s --day 1 --part 1   # Run only part 1 of day 1
   %(prog)s -d 5 -p 2          # Run only part 2 of day 5
+  %(prog)s --day 1 --sample   # Run day 1 with sample input
         """
     )
     
@@ -143,6 +133,12 @@ Examples:
         help="Run all available solutions"
     )
     
+    parser.add_argument(
+        "--sample",
+        action="store_true",
+        help="Use sample input files (day_XX_sample.txt) instead of puzzle inputs"
+    )
+    
     args = parser.parse_args()
     
     # Validate arguments
@@ -159,7 +155,7 @@ Examples:
     if args.all:
         run_all()
     else:
-        run_day(args.day, args.part)
+        run_day(args.day, args.part, args.sample)
 
 
 if __name__ == "__main__":

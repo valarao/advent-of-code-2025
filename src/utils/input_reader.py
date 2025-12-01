@@ -3,12 +3,19 @@ from pathlib import Path
 from typing import List
 
 
-def read_input(day: int, part: int = 1) -> List[str]:
+def read_input(day: int, part: int = 1, use_sample: bool = False) -> List[str]:
     project_root = Path(__file__).parent.parent.parent
-    input_file = project_root / "inputs" / f"day_{day:02d}_part_{part}.txt"
+    
+    if use_sample:
+        input_file = project_root / "inputs" / f"day_{day:02d}_sample.txt"
+    else:
+        input_file = project_root / "inputs" / f"day_{day:02d}_input.txt"
     
     if not input_file.exists():
-        raise FileNotFoundError(f"No input file found for day {day}, part {part}: {input_file}")
+        if use_sample:
+            raise FileNotFoundError(f"No sample file found for day {day}: {input_file}")
+        else:
+            raise FileNotFoundError(f"No input file found for day {day}: {input_file}")
     
     with open(input_file) as file:
         return [line.rstrip() for line in file]
