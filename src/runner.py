@@ -1,3 +1,4 @@
+#!/usr/bin/env pypy3
 """CLI runner for Advent of Code solutions."""
 
 import argparse
