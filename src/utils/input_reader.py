@@ -18,7 +18,7 @@ def read_input(day: int, part: int = 1, use_sample: bool = False) -> List[str]:
             raise FileNotFoundError(f"No input file found for day {day}: {input_file}")
     
     with open(input_file) as file:
-        return [line.rstrip() for line in file]
+        return [line for line in file]
 
 
 def read_input_raw(filename: str) -> List[str]:
@@ -26,5 +26,5 @@ def read_input_raw(filename: str) -> List[str]:
     input_file = project_root / "inputs" / filename
     
     with open(input_file) as file:
-        return [line.rstrip() for line in file]
+        return [line for line in file]
 
